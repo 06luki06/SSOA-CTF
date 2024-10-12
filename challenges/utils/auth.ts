@@ -2,7 +2,7 @@ import passport from "passport";
 import {Strategy as LocalStrategy} from "passport-local";
 
 
-const users = [
+export const users = [
     {
         id: 1,
         username: 'homer',

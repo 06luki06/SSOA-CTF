@@ -4,6 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:stop": "docker-compose down --volumes",
+    "docker:start": "docker-compose up",
     "dev": "nodemon --exec ts-node index.ts",
     "start": "ts-node index.ts"
   },
@@ -19,13 +21,17 @@
     "@types/express-session": "^1.18.0",
     "@types/passport": "^1.0.16",
     "@types/passport-local": "^1.0.38",
+    "@types/pg": "^8.11.10",
     "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.25.0",
+    "drizzle-orm": "^0.34.1",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
     "express-session": "^1.18.1",
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "pg": "^8.13.0",
     "ts-node": "^10.9.2"
   }
 }

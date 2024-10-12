@@ -1,17 +1,16 @@
 
-import express, { Express, Request, Response, Application } from 'express';
+import express, { Request, Response, Application } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import session from "express-session";
 import passport from "passport";
-import {Strategy as LocalStrategy} from "passport-local";
-import AuthStrategy from "./utils/auth";
+import AuthStrategy, {users} from "./utils/auth";
 
 // For env File 
 dotenv.config();
 
 const app: Application = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 3000;
 
 // Set the view engine to EJS and set up the views directory
 app.set('view engine', 'ejs');
@@ -70,6 +69,24 @@ app.get('/profile', ensureAuthenticated, (req: Request, res: Response) => {
     res.render('profile', { title: 'Nuclear Power Plant Profile', username: user.username});
 
 });
+
+app.post('/waste', (req: Request, res: Response) => {
+    // TODO: change with db impl
+    // Base 64 encode username and password of the user homer
+    const user = users.find(u => u.username === 'homer');
+    // @ts-ignore
+    const token = Buffer.from(`${user.username}:${user.password}`).toString('base64');
+    // get the url from the form data body
+    const url = req.body.url;
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Basic ${token}`
+        }
+    });
+
+});
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });

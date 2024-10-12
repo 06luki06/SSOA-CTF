@@ -13,7 +13,12 @@ body {
     background-color: #f0f0f0;
 }
 
-.login-card {
+.card-container {
+    display: flex;
+    gap: 25px;
+}
+
+.card {
     width: 350px;
     padding: 20px;
     background-color: white;
@@ -23,9 +28,31 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.card > img {
+    width: 100%;
+    aspect-ratio: auto;
+}
+
+.homer-waste-box > form {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.homer-waste-box > form > button {
+    padding: 1rem;
+    font-size: 16px;
+    background-color: #fca311;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
 h2 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .input-group {
@@ -52,9 +79,9 @@ input:focus {
     border-color: #777;
 }
 
-button {
+.btn-primary {
     width: 100%;
-    padding: 10px;
+    padding: 1rem;
     font-size: 16px;
     background-color: #fca311;
     color: white;
@@ -64,7 +91,7 @@ button {
     transition: background-color 0.3s;
 }
 
-button:hover {
+.btn-primary:hover {
     background-color: #e07a00;
 }
 
