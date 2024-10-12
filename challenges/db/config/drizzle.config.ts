@@ -1,7 +1,7 @@
 import { defineConfig } from 'drizzle-kit'
 // via connection params
 import dotenv from "dotenv";
-import {getEnvVar} from "../utils/environment";
+import {getEnvVar} from "../../utils/environment";
 
 
 const user = getEnvVar("PG_USER");
@@ -20,5 +20,6 @@ export default defineConfig({
         database: database,
         ssl: false,
     },
-    schema: './schema/schema.ts',
-})
+    schema: './db/schema/schema.ts',
+    schemaFilter: ["nuclear"],
+});

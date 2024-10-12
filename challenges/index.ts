@@ -4,7 +4,10 @@ import dotenv from 'dotenv';
 import path from 'path';
 import session from "express-session";
 import passport from "passport";
-import AuthStrategy, {users} from "./utils/auth";
+import AuthStrategy from "./utils/auth";
+import {users} from "./db/schema/schema";
+import {db} from "./db/db";
+import {eq} from "drizzle-orm";
 
 // For env File 
 dotenv.config();
@@ -70,21 +73,20 @@ app.get('/profile', ensureAuthenticated, (req: Request, res: Response) => {
 
 });
 
-app.post('/waste', (req: Request, res: Response) => {
+app.post('/waste', async (req: Request, res: Response) => {
     // TODO: change with db impl
     // Base 64 encode username and password of the user homer
-    const user = users.find(u => u.username === 'homer');
+    const [user] = await db.select().from(users).where(eq(users.username, "homer"));
     // @ts-ignore
     const token = Buffer.from(`${user.username}:${user.password}`).toString('base64');
     // get the url from the form data body
     const url = req.body.url;
-    fetch(url, {
+    await fetch(url, {
         method: 'POST',
         headers: {
             'Authorization': `Basic ${token}`
         }
     });
-
 });
 
 app.listen(port, () => {

@@ -1,9 +1,10 @@
-import { AnyPgColumn } from "drizzle-orm/pg-core";
-import { pgEnum, pgTable as table } from "drizzle-orm/pg-core";
+import {AnyPgColumn, pgSchema} from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
 
 
-export const users = table(
+export const nuclearSchema= pgSchema("nuclear")
+
+export const users = nuclearSchema.table(
     "users",
     {
         id: t.integer().primaryKey().generatedAlwaysAsIdentity(),

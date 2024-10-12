@@ -5,7 +5,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "docker:stop": "docker-compose down --volumes",
-    "docker:start": "docker-compose up",
+    "docker:start": "docker-compose up -d",
+    "drizzle:generate": "npx drizzle-kit generate --config=./db/config/drizzle.config.ts",
+    "drizzle:push": "npx drizzle-kit push --config=./db/config/drizzle.config.ts",
+    "drizzle:delete": "rm -rf ./drizzle",
+    "seed": "ts-node db/seeders/index.ts",
+    "predev": "npm run docker:stop && npm run docker:start && npm run drizzle:delete && npm run drizzle:generate && npm run drizzle:push && npm run seed",
     "dev": "nodemon --exec ts-node index.ts",
     "start": "ts-node index.ts"
   },
