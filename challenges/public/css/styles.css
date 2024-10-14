@@ -22,10 +22,11 @@ body {
     width: 350px;
     padding: 20px;
     background-color: white;
-    border: 15px solid transparent;
+    border: 10px solid;  /* Make sure you define the border width */
     border-image: linear-gradient(135deg, yellow 12.5%, black 12.5%, black 25%, yellow 25%, yellow 37.5%, black 37.5%, black 50%, yellow 50%, yellow 62.5%, black 62.5%, black 75%, yellow 75%, yellow 87.5%, black 87.5%) 10;
-    border-radius: 15px;
+    border-radius: 20px;  /* Add border radius here */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    min-height: 200px;
 }
 
 .card > img {
@@ -111,5 +112,9 @@ input:focus {
     object-fit: cover;
     opacity: 0.3;
     filter: blur(5px);
+}
+
+#employeeSearch {
+
 }
 

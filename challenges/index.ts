@@ -1,13 +1,11 @@
 
-import express, { Request, Response, Application } from 'express';
+import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import session from "express-session";
 import passport from "passport";
 import AuthStrategy from "./utils/auth";
-import {users} from "./db/schema/schema";
-import {db} from "./db/db";
-import {eq} from "drizzle-orm";
+import Router from "./router";
 
 // For env File 
 dotenv.config();
@@ -34,60 +32,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-app.get('/', (req: Request, res: Response) => {
-    if (!req.isAuthenticated()) {
-        res.redirect('/login');
-    } else {
-        res.redirect('/profile');
-    }
-});
-
-// Route to render the login page
-app.get('/login', (req: Request, res: Response) => {
-  res.render('login', { title: 'Nuclear Power Plant Login' });
-});
-
 passport.use(AuthStrategy);
 
-app.post('/login',
-    passport.authenticate('local', {
-        successRedirect: '/profile',
-        failureRedirect: '/login',
-    })
-);
 
-function ensureAuthenticated(req: Request, res: Response, next: Function) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/login');
-}
-
-app.get('/profile', ensureAuthenticated, (req: Request, res: Response) => {
-
-    const user = req.user;
-
-    // @ts-ignore
-    res.render('profile', { title: 'Nuclear Power Plant Profile', username: user.username});
-
-});
-
-app.post('/waste', async (req: Request, res: Response) => {
-    // TODO: change with db impl
-    // Base 64 encode username and password of the user homer
-    const [user] = await db.select().from(users).where(eq(users.username, "homer"));
-    // @ts-ignore
-    const token = Buffer.from(`${user.username}:${user.password}`).toString('base64');
-    // get the url from the form data body
-    const url = req.body.url;
-    await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Basic ${token}`
-        }
-    });
-});
+app.use(Router)
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
