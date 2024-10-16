@@ -25,7 +25,7 @@ Overall, we plan to have one big CTF with multiple challenges.
 Initial State: Springfield nuclear plant website login screen
 website logs back "username is correct, password is incorrect" -> finding out user "homer" exists
 Another part of the application is a section "Help homer waste time" -> with an input field for an URL
-Putting a URL there makes the backend access it using Homer's basic auth. 
+Putting a URL there makes the backend access it using Homer's basic auth.
 
 When you are in control of the URL, you can get Homer's basic auth.
 The credentials then can be retrieved by decoding the basic auth header. Those can be used to login as Homer.

@@ -2,6 +2,7 @@ import {users} from "../schema/schema";
 import {db} from "../db";
 import {getEnvVar} from "../../utils/environment";
 import { faker } from '@faker-js/faker';
+import CryptoJS from 'crypto-js';
 
 const hpw = getEnvVar("HOMER_PASSWORD");
 const mpw = getEnvVar("BURNS_PASSWORD");
@@ -107,7 +108,7 @@ export const seedUser = async () => {
         {
             username: "cmBurns",
             name: "Charles Montgomery Burns",
-            password: mpw,
+            password: CryptoJS.MD5(mpw).toString(),
             isAdmin: true,
         },
         {
