@@ -26,36 +26,35 @@ const names = [
     "Melvin Powell",
     "Dave Shutton"
 ];
-const preDefUsers = [
-    {
+const homer = {
         username: "hSimpson",
         name: "Homer Simpson",
         password: CryptoJS.MD5(hpw).toString(),
         isAdmin: false,
-    },
-    {
-        username: "cmBurns",
+    };
+const burns = {
+    username: "cmBurns",
         name: "Charles Montgomery Burns",
         password: CryptoJS.MD5(mpw).toString(),
         isAdmin: true,
+}
+
+let userArray = names.map((name) => {
+    const [firstname, ...lastnames] = name.split(" ");
+    const lastname = lastnames.join(" ").replace(" ", "");
+    return {
+        password: CryptoJS.MD5(faker.internet.password()).toString(),
+        isAdmin: false,
+        name,
+        username: firstname.charAt(0).toLowerCase()
+            + lastname.charAt(0).toUpperCase()
+            + lastname.substring(1).toLowerCase(),
     }
-]
+})
+
+userArray.splice(4, 0, homer)
+userArray.splice(16, 0, burns)
 
 export const seedUser = async () => {
-    await db.insert(users).values([
-        ...preDefUsers,
-        ...names.map((name) => {
-            const [firstname, ...lastnames] = name.split(" ");
-            const lastname = lastnames.join(" ").replace(" ", "");
-            console.log(firstname, lastname);
-            return {
-                password: CryptoJS.MD5(faker.internet.password()).toString(),
-                isAdmin: false,
-                name,
-                username: firstname.charAt(0).toLowerCase()
-                    + lastname.charAt(0).toUpperCase()
-                    + lastname.substring(1).toLowerCase(),
-            }
-        })
-    ]);
+    await db.insert(users).values(userArray);
 }
