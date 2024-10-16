@@ -38,7 +38,6 @@ router.post('/logout', (req, res, next) => {
 
 
 router.post('/waste', async (req, _res) => {
-    // TODO: change with db impl
     // Base 64 encode username and password of the user homer
     const [user] = await db.select().from(users).where(eq(users.username, "homer"));
     // @ts-ignore

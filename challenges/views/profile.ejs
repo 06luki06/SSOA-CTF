@@ -15,7 +15,7 @@
 <div class="card-container">
 <div class="card">
     <h1>Profile</h1>
-    <p>Welcome, <%= username %></p>
+    <p>Welcome, <%- username %></p>
     <form action="/logout" method="post">
         <button type="submit">
             Logout
@@ -30,7 +30,7 @@
             <label for="employeeName">Name</label>
             <input type="text" id="employeeName" name="employeeName" required>
         </div>
-        <button type="submit">
+        <button type="submit" class="btn-primary">
             Search
         </button>
     </form>

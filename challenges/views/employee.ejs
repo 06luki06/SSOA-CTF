@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Employee</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/employee.js" defer></script>
 </head>
 <body>
 <div class="bg-img-container">
@@ -20,11 +21,31 @@
                 <label for="employeeName">Name</label>
                 <input type="text" id="employeeName" name="employeeName" required>
             </div>
-            <button type="submit">
+            <button type="submit" class="btn-primary">
                 Search
             </button>
         </form>
     </div>
+    <% if (isAdmin) { %>
+        <div class="card" id="employeeSearch">
+            <h1>Thoughts on Mr. Burns</h1>
+            <div class="comments">
+                <% comments.forEach(cmt => { %>
+                    <p><%- cmt.comment %></p>
+                <% }) %>
+            </div>
+            <form action="/comments" method="post">
+                <div class="input-group">
+                    <label for="comment">Comment</label>
+                    <input type="text" id="comment" name="comment" required>
+                </div>
+                <button type="submit" class="btn-primary" id="commentBtn">
+                    Leave a comment
+                </button>
+            </form>
+        </div>
+    <% } else { %>
+    <% } %>    
 </div>
 </body>
 </html>

@@ -31,9 +31,9 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
 
 passport.use(AuthStrategy);
-
 
 app.use(Router)
 

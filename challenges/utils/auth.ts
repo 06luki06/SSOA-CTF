@@ -3,6 +3,15 @@ import { eq, and } from 'drizzle-orm';
 import {db} from "../db/db";
 import {users} from "../db/schema/schema";
 import passport from "passport";
+import CryptoJS from 'crypto-js';
+
+export type User = {
+    id: number;
+    username: string;
+    name: string;
+    isAdmin: boolean;
+    password: string;
+}
 
 const fetchUser = async (username: string, password: string) => {
     const [result] = await db.select().from(users).where(
@@ -13,7 +22,7 @@ const fetchUser = async (username: string, password: string) => {
     if (!result) {
         return null;
     }
-    const isCorrect = password === result.password;
+    const isCorrect = CryptoJS.MD5(password).toString() === result.password;
     return isCorrect ? result : null;
 }
 
