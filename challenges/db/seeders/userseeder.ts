@@ -7,127 +7,55 @@ import CryptoJS from 'crypto-js';
 const hpw = getEnvVar("HOMER_PASSWORD");
 const mpw = getEnvVar("BURNS_PASSWORD");
 
+const names = [
+    "Waylon Smithers",
+    "Carl Carlson",
+    "Lenny Leonard",
+    "Frank Grimes",
+    "Mindy Simmons",
+    "Sherri Mackleberry",
+    "Terri Mackleberry",
+    "Hank Scorpio",
+    "Don Delgrosso",
+    "Eugene Fisk",
+    "Howard K. Duff VIII",
+    "Jack Marley",
+    "Fred Kranepool",
+    "Llewellyn Sinclair",
+    "Charlie Montelongo",
+    "Melvin Powell",
+    "Dave Shutton"
+];
+const preDefUsers = [
+    {
+        username: "hSimpson",
+        name: "Homer Simpson",
+        password: CryptoJS.MD5(hpw).toString(),
+        isAdmin: false,
+    },
+    {
+        username: "cmBurns",
+        name: "Charles Montgomery Burns",
+        password: CryptoJS.MD5(mpw).toString(),
+        isAdmin: true,
+    }
+]
+
 export const seedUser = async () => {
     await db.insert(users).values([
-        {
-            username: "hSimpson",
-            name: "Homer Simpson",
-            password: hpw,
-            isAdmin: false,
-        },
-        {
-            username: "wSmithers",
-            name: "Waylon Smithers",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "cCarlson",
-            name: "Carl Carlson",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "lLeonard",
-            name: "Lenny Leonard",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "fGrimes",
-            name: "Frank Grimes",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "cCharlie",
-            name: "Charlie",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "mSimmons",
-            name: "Mindy Simmons",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "sMackleberry",
-            name: "Sherri Mackleberry",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "tMackleberry",
-            name: "Terri Mackleberry",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "hScorpio",
-            name: "Hank Scorpio",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "dDelgrosso",
-            name: "Don Delgrosso",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "eFisk",
-            name: "Eugene Fisk",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "hDuff",
-            name: "Howard K. Duff VIII",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "jMarley",
-            name: "Jack Marley",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "fKranepool",
-            name: "Fred Kranepool",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "lSinclair",
-            name: "Llewellyn Sinclair",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "cmBurns",
-            name: "Charles Montgomery Burns",
-            password: CryptoJS.MD5(mpw).toString(),
-            isAdmin: true,
-        },
-        {
-            username: "cMontelongo",
-            name: "Charlie Montelongo",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "mPowell",
-            name: "Melvin Powell",
-            password: faker.internet.password(),
-            isAdmin: false,
-        },
-        {
-            username: "dShutton",
-            name: "Dave Shutton",
-            password: faker.internet.password(),
-            isAdmin: false,
-        }
+        ...preDefUsers,
+        ...names.map((name) => {
+            const [firstname, ...lastnames] = name.split(" ");
+            const lastname = lastnames.join(" ").replace(" ", "");
+            console.log(firstname, lastname);
+            return {
+                password: CryptoJS.MD5(faker.internet.password()).toString(),
+                isAdmin: false,
+                name,
+                username: firstname.charAt(0).toLowerCase()
+                    + lastname.charAt(0).toUpperCase()
+                    + lastname.substring(1).toLowerCase(),
+            }
+        })
     ]);
 }
