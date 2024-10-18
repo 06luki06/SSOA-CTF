@@ -20,6 +20,7 @@ export const comments = nuclearSchema.table(
     {
         id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
         authorId: t.integer("author_id").notNull(),
+        recipientId: t.integer("recipient_id").notNull(),
         comment: t.varchar().notNull(),
     },
 );

@@ -26,23 +26,19 @@
             </button>
         </form>
     </div>
-    <% if (isAdmin) { %>
-        <div class="card" id="employeeSearch">
-            <h1>Thoughts on Mr. Burns</h1>
-            <div class="comments">
-                <% comments.forEach(cmt => { %>
-                    <p><%- cmt.comment %></p>
-                <% }) %>
+    <% if (!isAdmin) { %>
+        <div class="card" id="burnsComments">
+            <h1>Thoughts from colleagues</h1>
+            <div id="comments-con" class="comments">
+
             </div>
-            <form action="/comments" method="post">
-                <div class="input-group">
-                    <label for="comment">Comment</label>
-                    <input type="text" id="comment" name="comment" required>
-                </div>
-                <button type="submit" class="btn-primary" id="commentBtn">
-                    Leave a comment
-                </button>
-            </form>
+            <div class="input-group">
+                <label for="comment">Comment</label>
+                <input type="text" id="comment" name="comment" required>
+            </div>
+            <button type="submit" class="btn-primary" id="commentBtn">
+                Leave a comment
+            </button>
         </div>
     <% } else { %>
     <% } %>    
