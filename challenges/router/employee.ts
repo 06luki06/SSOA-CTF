@@ -2,7 +2,7 @@ import express from "express";
 import {ensureAuthenticated} from "../middleware/auth";
 import {db} from "../db/db";
 import {comments, users} from "../db/schema/schema";
-import {eq, ilike, sql} from "drizzle-orm";
+import {eq, ilike} from "drizzle-orm";
 import { User } from "../utils/auth";
 
 const employeeRouter = express.Router();
@@ -15,6 +15,7 @@ employeeRouter.get('/employee', ensureAuthenticated, (req, res) => {
 
 employeeRouter.get('/employee/:eid', ensureAuthenticated, async (req, res) => {
     const searchId = Number(req.params.eid);
+    const user = req.user as User;
     const [{ eid, name, isAdmin}] = await db.select({
         eid: users.id,
         name: users.name,
@@ -22,7 +23,7 @@ employeeRouter.get('/employee/:eid', ensureAuthenticated, async (req, res) => {
     }).from(users).where(
         eq(users.id, searchId),
     );
-    if (!eid) {
+    if (!eid || eid === user.id) {
         res.redirect('/employee');
     }
     res.render('employee', {
@@ -45,14 +46,10 @@ employeeRouter.get('/employee/admin/:eid', ensureAuthenticated, async (req, res)
         res.redirect('/employee');
     }
 
-    const commentsData = await db.select().from(comments);
-    console.log(commentsData);
-
     res.render('employee', {
         title: 'Nuclear Power Plant Profile',
         isAdmin: isAdmin,
         name: name,
-        comments: commentsData
     });
 });
 
@@ -79,13 +76,25 @@ employeeRouter.post('/employee/search', ensureAuthenticated, async (req, res) =>
 
 employeeRouter.post('/comments', ensureAuthenticated, async (req, res) => {
     const user = req.user as User;
-    const comment = req.body.comment;
+    const { comment, recipientId } = req.body;
 
-    const stringToInsert = `INSERT INTO nuclear.comments (author_id, comment) VALUES (${user.id}, '${comment}');`;
-    console.log(stringToInsert);
-    
-    await db.execute(stringToInsert);
+    const result = await db.insert(comments).values({
+        authorId: user.id,
+        comment,
+        recipientId,
+    })
+    if (result.rowCount === 0) {
+       res.status(400).send('Could not add comment');
+       return;
+    }
     res.send('Comment added');
+});
+
+employeeRouter.get('/comments/:eid', async (req, res) => {
+    const searchId = req.params.eid;
+    const selectString = `SELECT author_id, comment FROM nuclear.comments WHERE recipient_id = ` + searchId;
+    const result = await db.execute(selectString);
+    res.send(result.rows);
 });
 
 export default employeeRouter;
