@@ -1,0 +1,46 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+
+<body>
+    <div class="bg-img-container">
+        <img src="/public/img/bg-img.jpg" alt="Background" class="bg-img">
+    </div>
+    <div class="card-container">
+        <div class="card">
+            <h2>Login</h2>
+            {% if error %}
+            <p style="color:red;">{{ error }}</p>
+            {% endif %}
+            <form action="/login" method="POST">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button class="btn-primary" type="submit">Login</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>Help Homer waste time</h2>
+            <img src="/public/img/homer_simpson.jpeg" alt="Homer Simpson">
+            <div class="homer-waste-box">
+                <form action="/waste" method="POST">
+                    <input type="text" class="search-box" id="waste-box-search" name="url">
+                    <button type="submit" id="waste-box-search">Go</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

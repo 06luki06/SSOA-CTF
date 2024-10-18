@@ -1,0 +1,30 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def get_env_var(name: str) -> str:
+    value = os.getenv(name)
+    if not value:
+        raise EnvironmentError(f"Environment variable {name} is not set")
+    return value
+
+# Database configuration
+PG_HOST = get_env_var("PG_HOST")
+PG_PORT = get_env_var("PG_PORT")
+PG_DB = get_env_var("PG_DB")
+PG_USER = get_env_var("PG_USER")
+PG_PASSWORD = get_env_var("PG_PASSWORD")
+
+DATABASE_URL = f"postgresql://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}"
+
+# Secret key for session
+SECRET_KEY = get_env_var("SECRET_KEY")
+
+# Homer's credentials
+HOMER_USERNAME = get_env_var("HOMER_USERNAME")
+HOMER_PASSWORD = get_env_var("HOMER_PASSWORD")
+
+# Burns's credentials
+BURNS_USERNAME = get_env_var("BURNS_USERNAME")
+BURNS_PASSWORD = get_env_var("BURNS_PASSWORD")

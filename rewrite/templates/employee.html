@@ -1,0 +1,50 @@
+<!-- templates/employee.html -->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <script src="/public/js/employee.js" defer></script>
+</head>
+
+<body>
+    <div class="bg-img-container">
+        <img src="/public/img/bg-img.jpg" alt="Background" class="bg-img">
+    </div>
+    <div class="card-container">
+        <!-- Employee Search Card -->
+        <div class="card" id="employeeSearch">
+            <h1>Employee Search</h1>
+            <form action="/employee/search" method="post">
+                <div class="input-group">
+                    <label for="employeeName">Name</label>
+                    <input type="text" id="employeeName" name="employeeName" required>
+                </div>
+                <button type="submit" class="btn-primary">
+                    Search
+                </button>
+            </form>
+        </div>
+        {% if not isAdmin %}
+        <div class="card" id="burnsComments">
+            <h1>Thoughts from colleagues</h1>
+            <div id="comments-con" class="comments">
+                <!-- Comments will be loaded here -->
+            </div>
+            <div class="input-group">
+                <label for="comment">Comment</label>
+                <input type="text" id="comment" name="comment" required>
+            </div>
+            <button type="button" class="btn-primary" id="commentBtn">
+                Leave a comment
+            </button>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Hidden input to store recipientId -->
+    <input type="hidden" id="recipientId" value="{{ eid }}">
+</body>
+
+</html>
