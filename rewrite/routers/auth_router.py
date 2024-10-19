@@ -89,4 +89,4 @@ async def waste(
     async with httpx.AsyncClient() as client:
         await client.post(url, headers={'Authorization': f'Basic {token}'})
 
-    return {"message": "Request sent successfully"}
+    return RedirectResponse(url="/", status_code=302)
