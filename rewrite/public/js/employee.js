@@ -26,10 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(`/comments/${recipientId}`);
         const comments = await response.json();
         commentContainer.innerHTML = ''; // Clear previous comments
-        comments.forEach(comment => {
+        comments["comments"].forEach(comment => {
             const commentElement = document.createElement('div');
             commentElement.classList.add('comment');
-            commentElement.innerHTML = `<strong>${comment.author_name}:</strong> ${comment.comment}`;
+            commentElement.innerHTML = `<strong>${comment.name}:</strong> ${comment.comment}`;
             commentContainer.appendChild(commentElement);
         });
     }
