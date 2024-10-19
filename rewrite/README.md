@@ -7,12 +7,9 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-2. Run the app
+2. Run the app with invoke
 ```bash
-uvicorn main:app --reload
+invoke start
 ```
 
-3. seed the db in a new terminal
-```bash
-python seed.py
-```
+This empties the db and starts the app.

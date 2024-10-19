@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from database import Base
 
 class User(Base):
-    __tablename__ = 'employees'  # Matches 'nuclear.employees'
+    __tablename__ = 'employees'
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
@@ -15,7 +15,7 @@ class User(Base):
     comments_received = relationship('Comment', back_populates='recipient', foreign_keys='Comment.recipient_id')
 
 class Comment(Base):
-    __tablename__ = 'comments'  # Matches 'nuclear.comments'
+    __tablename__ = 'comments'
 
     id = Column(Integer, primary_key=True, index=True)
     author_id = Column(Integer, ForeignKey('employees.id'), nullable=False)

@@ -5,4 +5,4 @@ const runSeeders = async () => {
     await seedUser();
 }
 
-runSeeders();
+runSeeders().catch((err) => { console.error(err) });

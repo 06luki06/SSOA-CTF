@@ -22,9 +22,7 @@ DATABASE_URL = f"postgresql://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB
 SECRET_KEY = get_env_var("SECRET_KEY")
 
 # Homer's credentials
-HOMER_USERNAME = get_env_var("HOMER_USERNAME")
 HOMER_PASSWORD = get_env_var("HOMER_PASSWORD")
 
 # Burns's credentials
-BURNS_USERNAME = get_env_var("BURNS_USERNAME")
 BURNS_PASSWORD = get_env_var("BURNS_PASSWORD")

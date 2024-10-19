@@ -118,3 +118,7 @@ input:focus {
 
 }
 
+.greeting {
+    margin-block: 1rem;
+}
+

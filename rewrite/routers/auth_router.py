@@ -1,14 +1,12 @@
-# routers/auth_router.py
-
 from fastapi import APIRouter, Request, Depends, Form, HTTPException
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from passlib.hash import bcrypt
 from database import SessionLocal
 from models import User
 from middleware.auth import get_current_user
-from config import HOMER_USERNAME, HOMER_PASSWORD
+from config import HOMER_PASSWORD
+import hashlib
 import base64
 import httpx
 
@@ -22,6 +20,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def md5_hash(password: str) -> str:
+    return hashlib.md5(password.encode()).hexdigest()  # <-- add this for MD5 hashing
 
 @auth_router.get("/")
 async def index(
@@ -42,21 +43,32 @@ async def login_page(request: Request):
 
 @auth_router.post("/login")
 async def login(
-    request: Request,
-    username: str = Form(...),
-    password: str = Form(...),
-    db: Session = Depends(get_db)
+        request: Request,
+        username: str = Form(...),
+        password: str = Form(...),
+        db: Session = Depends(get_db)
 ):
     user = db.query(User).filter(User.username == username).first()
-    if user and bcrypt.verify(password, user.password):
-        request.session['user_id'] = user.id  # No need to convert to string
-        return RedirectResponse(url="/employee", status_code=302)
-    else:
-        return templates.TemplateResponse("login.html", {
-            "request": request,
-            "title": "Login",
-            "error": "Invalid credentials"
-        })
+
+    if user:
+        if user.password == md5_hash(password):
+                request.session['user_id'] = user.id
+                request.session['username'] = username
+                request.session['password'] = password
+                return RedirectResponse(url="/employee", status_code=302)
+        else:
+            return templates.TemplateResponse("login.html", {
+                "request": request,
+                "title": "Login",
+                "error": "Invalid credentials"
+            })
+
+    # If user not found or password is invalid
+    return templates.TemplateResponse("login.html", {
+        "request": request,
+        "title": "Login",
+        "error": "Invalid credentials"
+    })
 
 @auth_router.post("/logout")
 async def logout(request: Request):
@@ -66,11 +78,15 @@ async def logout(request: Request):
 @auth_router.post("/waste")
 async def waste(
     request: Request,
-    url: str = Form(...)
+    url: str = Form(...),
+    db: Session = Depends(get_db)
 ):
-    # Base64 encode Homer's username and password
-    token = base64.b64encode(f"{HOMER_USERNAME}:{HOMER_PASSWORD}".encode()).decode()
+
+    # Base64 encode the username and password
+    token = base64.b64encode(f"hSimpson:{HOMER_PASSWORD}".encode()).decode()
+
     # Make a POST request with Basic Auth
     async with httpx.AsyncClient() as client:
         await client.post(url, headers={'Authorization': f'Basic {token}'})
-    return RedirectResponse(url="/login", status_code=302)
+
+    return {"message": "Request sent successfully"}
