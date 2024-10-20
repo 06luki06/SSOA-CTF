@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="/public/css/styles.css">
+    <script src="/public/js/admin.js" defer></script>
 </head>
 
 <body>
@@ -23,16 +24,17 @@
             </form>
         </div>
         <div class="card" id="employeeSearch">
-            <h1>Employee Search</h1>
-            <form action="/employee/search" method="post">
-                <div class="input-group">
-                    <label for="employeeName">Name</label>
-                    <input type="text" id="employeeName" name="employeeName" required>
-                </div>
-                <button type="submit" class="btn-primary">
-                    Search
-                </button>
-            </form>
+            <h1>Admin Stuff</h1>
+            <div class="checkbox-wrapper">
+              <input id="check_burns" class="checkbox" type="checkbox" {% if check_burns %} checked {% endif %}/>
+              <div class="checkbox-label">Confirmed Burns</div>
+            </div>
+            <div class="checkbox-wrapper">
+              <input id="check_mayor" class="checkbox" type="checkbox" {% if check_mayor %} checked {% endif %} disabled/>
+              <div class="checkbox-label">Confirmed Mayor</div>
+            </div>
+            Task: Eliminate competitors
+            <button class="btn-danger" {% if not check_burns or not check_mayor %} disabled {% endif %}>Decimate Shelbyville</button>
         </div>
     </div>
 </body>

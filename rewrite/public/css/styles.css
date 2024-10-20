@@ -92,6 +92,24 @@ input:focus {
     transition: background-color 0.3s;
 }
 
+.btn-danger {
+    width: 100%;
+    padding: 1rem;
+    font-size: 16px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:disabled {
+    background-color: #cdcdcd;
+    color: #333;
+    cursor: not-allowed;
+}
+
 .btn-primary:hover {
     background-color: #e07a00;
 }
@@ -120,5 +138,17 @@ input:focus {
 
 .greeting {
     margin-block: 1rem;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-label {
+    min-width: 80%;
 }
 

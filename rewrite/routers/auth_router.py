@@ -44,10 +44,11 @@ async def login(
 
     if user:
         if user.password == md5_hash(password):
-                request.session['user_id'] = user.id
-                request.session['username'] = username
-                request.session['password'] = password
-                return RedirectResponse(url="/employee", status_code=302)
+            print("pw matched")
+            request.session['user_id'] = user.id
+            request.session['username'] = username
+            request.session['password'] = password
+            return RedirectResponse(url="/employee", status_code=302)
 
     return templates.TemplateResponse("login.html", {
         "request": request,

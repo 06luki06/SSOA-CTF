@@ -29,3 +29,11 @@ def ensure_authenticated(request: Request, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=401, detail="Not authenticated")
     return user
+
+def ensure_admin(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    if not user.is_admin:
+        raise HTTPException(status_code=403, detail="Not admin")
+    return user

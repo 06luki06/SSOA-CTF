@@ -14,19 +14,6 @@
         <img src="/public/img/bg-img.jpg" alt="Background" class="bg-img">
     </div>
     <div class="card-container">
-        <!-- Employee Search Card -->
-        <div class="card" id="employeeSearch">
-            <h1>Employee Search</h1>
-            <form action="/employee/search" method="post">
-                <div class="input-group">
-                    <label for="employeeName">Name</label>
-                    <input type="text" id="employeeName" name="employeeName" required>
-                </div>
-                <button type="submit" class="btn-primary">
-                    Search
-                </button>
-            </form>
-        </div>
         {% if not isAdmin %}
         <div class="card" id="burnsComments">
             <h1>Thoughts from colleagues</h1>
@@ -42,6 +29,19 @@
             </button>
         </div>
         {% endif %}
+     <!-- Employee Search Card -->
+        <div class="card" id="employeeSearch">
+            <h1>Employee Search</h1>
+            <form action="/employee/search" method="post">
+                <div class="input-group">
+                    <label for="employeeName">Name</label>
+                    <input type="text" id="employeeName" name="employeeName" required>
+                </div>
+                <button type="submit" class="btn-primary">
+                    Search
+                </button>
+            </form>
+        </div>
     </div>
     <!-- Hidden input to store recipientId -->
     <input type="hidden" id="recipientId" value="{{ eid }}">
