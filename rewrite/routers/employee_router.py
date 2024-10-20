@@ -18,9 +18,7 @@ class CommentCreate(BaseModel):
     recipientId: str
 
     class Config:
-        orm_mode = True
-
-# Existing CommentCreate Pydantic model here
+        from_attributes = True
 
 @employee_router.get("/employee")
 async def employee_profile(request: Request, user: User = Depends(ensure_authenticated)):

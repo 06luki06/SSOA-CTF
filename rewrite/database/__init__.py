@@ -1,1 +1,1 @@
-from database import get_db, SessionLocal, Base, engine
+from database.connection import get_db, SessionLocal, Base, engine

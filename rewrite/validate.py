@@ -14,7 +14,7 @@ class Comment(CommentBase):
     recipient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserBase(BaseModel):
     username: str = Field(..., max_length=255)
@@ -30,4 +30,4 @@ class User(UserBase):
     comments_received: List[Comment] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
