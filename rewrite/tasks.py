@@ -1,32 +1,25 @@
 # tasks.py
 
 from invoke import task
+import time
 
 @task
-def docker_up(ctx):
+def db(ctx):
+    ctx.run("docker compose down -v")
+    print("Docker containers have been stopped.")
+    time.sleep(1)
     ctx.run("docker compose up -d")
+    time.sleep(1)
+    ctx.run("python3 ./database/create_schema.py")
+    time.sleep(1)
+    ctx.run("python3 ./database/seed.py")
+    time.sleep(1)
 
 @task
-def clear_db(ctx):
-    ctx.run("python3 clear_db.py")
-
-@task
-def create_schema(ctx):
-    ctx.run("python3 create_schema.py")
-
-@task(pre=[clear_db, create_schema])
-def seed(ctx):
-    ctx.run("python3 seed.py")
-
-@task(pre=[seed])
 def serve(ctx):
     ctx.run("uvicorn main:app --reload")
 
-@task(pre=[docker_up, serve])
+@task(pre=[db, serve])
 def start(ctx):
     print("Application has started.")
 
-@task
-def docker_down(ctx):
-    ctx.run("docker compose down")
-    print("Docker containers have been stopped.")

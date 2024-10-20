@@ -1,25 +1,17 @@
-from fastapi import APIRouter, Request, Depends, Form, HTTPException
+from fastapi import APIRouter, Request, Depends, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import User
+from database.connection import get_db
+from database.models import User
+from environment.config import HOMER_PASSWORD
 from middleware.auth import get_current_user
-from config import HOMER_PASSWORD
 import hashlib
 import base64
 import httpx
 
 auth_router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 def md5_hash(password: str) -> str:
     return hashlib.md5(password.encode()).hexdigest()  # <-- add this for MD5 hashing
@@ -56,14 +48,7 @@ async def login(
                 request.session['username'] = username
                 request.session['password'] = password
                 return RedirectResponse(url="/employee", status_code=302)
-        else:
-            return templates.TemplateResponse("login.html", {
-                "request": request,
-                "title": "Login",
-                "error": "Invalid credentials"
-            })
 
-    # If user not found or password is invalid
     return templates.TemplateResponse("login.html", {
         "request": request,
         "title": "Login",
@@ -72,14 +57,13 @@ async def login(
 
 @auth_router.post("/logout")
 async def logout(request: Request):
-    request.session.pop('user_id', None)
+    request.session.clear()
     return RedirectResponse(url="/login", status_code=302)
 
 @auth_router.post("/waste")
 async def waste(
     request: Request,
     url: str = Form(...),
-    db: Session = Depends(get_db)
 ):
 
     # Base64 encode the username and password
@@ -89,4 +73,4 @@ async def waste(
     async with httpx.AsyncClient() as client:
         await client.post(url, headers={'Authorization': f'Basic {token}'})
 
-    return RedirectResponse(url="/", status_code=302)
+    return RedirectResponse(url=request.url, status_code=204)

@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from routers import router
-from database import Base, engine
-from config import SECRET_KEY
+from database.connection import Base, engine
+from environment.config import SECRET_KEY
 
 # Create database tables
 Base.metadata.create_all(bind=engine)

@@ -1,6 +1,10 @@
 # Run the app
 
-1. Install the dependencies
+
+1. Create .env file
+    copy .env.template to .env and fill in values for the variables
+
+2. Install the dependencies
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate

@@ -1,7 +1,7 @@
 from database import SessionLocal, Base
+from environment import HOMER_PASSWORD, BURNS_PASSWORD
 from models import User
 from validate import UserCreate
-from config import HOMER_PASSWORD, BURNS_PASSWORD
 import hashlib
 import random
 import string

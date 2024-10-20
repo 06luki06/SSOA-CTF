@@ -1,29 +1,21 @@
-from fastapi import APIRouter, Request, Depends, Form, HTTPException, Body
+from fastapi import APIRouter, Request, Depends, Form, Body
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from database import SessionLocal
-from models import User, Comment
-from middleware.auth import ensure_authenticated, get_current_user
+from database import get_db
+from database.models import User, Comment
+from middleware.auth import ensure_authenticated
 from pydantic import BaseModel
 
 
 employee_router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 # Pydantic model for comment submission
 class CommentCreate(BaseModel):
     comment: str
-    recipientId: str  # Changed from UUID to int
+    recipientId: str
 
     class Config:
         orm_mode = True
@@ -108,27 +100,14 @@ async def add_comment(
 
 @employee_router.get("/comments/{recipient_id}")
 async def get_comments(
-        recipient_id: int,
+        recipient_id: str,
         db: Session = Depends(get_db)
 ):
-    # Query to fetch the recipient's name
-    full_name_query = "SELECT name FROM nuclear.employees WHERE id = :recipient_id"
-    full_name_result = db.execute(text(full_name_query), {"recipient_id": recipient_id}).fetchone()
-
-    # Extract the actual name from the tuple
-    full_name = full_name_result[0] if full_name_result else None
-
     # Query to fetch the comments
-    comments_raw_query = "SELECT * FROM nuclear.comments WHERE recipient_id = :recipient_id"
-    comments = db.execute(text(comments_raw_query), {"recipient_id": recipient_id}).fetchall()
+    comments_raw_query = "SELECT author_id, recipient_id, comment FROM nuclear.comments WHERE recipient_id = " + recipient_id
+    comments = db.execute(text(comments_raw_query)).fetchall()
 
     # Convert the result set to a list of dictionaries
     comments_list = [dict(row._mapping) for row in comments]
 
-    # Prepare the final response
-    result = {
-        "name": full_name,
-        "comments": comments_list
-    }
-
-    return JSONResponse(result)
+    return JSONResponse(comments_list)
