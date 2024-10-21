@@ -25,8 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchComments() {
         const response = await fetch(`/comments/${recipientId}`);
         const comments = await response.json();
+
+        console.log(comments);
+
         commentContainer.innerHTML = ''; // Clear previous comments
-        comments["comments"].forEach(comment => {
+        comments.forEach(comment => {
             const commentElement = document.createElement('div');
             commentElement.classList.add('comment');
             commentElement.innerHTML = `<strong>${comment.name}:</strong> ${comment.comment}`;

@@ -44,11 +44,14 @@ async def login(
 
     if user:
         if user.password == md5_hash(password):
-            print("pw matched")
             request.session['user_id'] = user.id
             request.session['username'] = username
             request.session['password'] = password
-            return RedirectResponse(url="/employee", status_code=302)
+
+            if user.is_admin:
+                return RedirectResponse(url="/admin", status_code=302)
+            else:
+                return RedirectResponse(url="/employee", status_code=302)
 
     return templates.TemplateResponse("login.html", {
         "request": request,
@@ -66,11 +69,8 @@ async def waste(
     request: Request,
     url: str = Form(...),
 ):
-
-    # Base64 encode the username and password
     token = base64.b64encode(f"hSimpson:{HOMER_PASSWORD}".encode()).decode()
 
-    # Make a POST request with Basic Auth
     async with httpx.AsyncClient() as client:
         await client.post(url, headers={'Authorization': f'Basic {token}'})
 

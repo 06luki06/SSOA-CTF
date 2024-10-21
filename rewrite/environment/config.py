@@ -27,3 +27,5 @@ HOMER_PASSWORD = get_req_env_var("HOMER_PASSWORD")
 
 # Burns's credentials
 BURNS_PASSWORD = get_req_env_var("BURNS_PASSWORD")
+
+NUKE_PIN = get_req_env_var("NUKE_PIN")

@@ -102,7 +102,7 @@ async def get_comments(
         db: Session = Depends(get_db)
 ):
     # Query to fetch the comments
-    comments_raw_query = "SELECT author_id, recipient_id, comment FROM nuclear.comments WHERE recipient_id = " + recipient_id
+    comments_raw_query = "SELECT u.name, c.recipient_id, c.comment FROM nuclear.comments c, nuclear.employees u WHERE u.id = c.author_id AND recipient_id = " + recipient_id
     comments = db.execute(text(comments_raw_query)).fetchall()
 
     # Convert the result set to a list of dictionaries

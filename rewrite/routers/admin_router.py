@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Request, Depends, Body
+from fastapi import APIRouter, Request, Depends, Body, Form
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+from starlette.responses import RedirectResponse
 
+from environment import NUKE_PIN
 from middleware.auth import ensure_admin
 from validate import User
 
@@ -20,7 +22,6 @@ async def login_page(
     request: Request,
     user: User = Depends(ensure_admin),
 ):
-    print(check)
     return templates.TemplateResponse("admin.html", {
         "request": request,
         "title": "Admin Portal",
@@ -35,6 +36,8 @@ async def postCheck(
     user: User = Depends(ensure_admin),
     body: Check = Body(...),
 ):
+
+    print("admin chekc" + str(body))
     global check
     check = body
     return templates.TemplateResponse("admin.html", {
@@ -43,4 +46,32 @@ async def postCheck(
         "username": user.username,
         "check_burns": check.burns,
         "check_mayor": check.mayor,
+    })
+
+@admin_router.get("/admin/nuke")
+async def nuke_shelby_ville(
+        request: Request,
+        user: User = Depends(ensure_admin),
+):
+    global check
+
+    if not check.burns or not check.mayor:
+        return RedirectResponse(url="/admin", status_code=302)
+
+    return templates.TemplateResponse("nuke.html", {
+        "request": request,
+        "title": "Nuclear Launch",
+    })
+
+@admin_router.post("/admin/nuke/pin")
+async def start_nuke(
+        request: Request,
+        user: User = Depends(ensure_admin),
+        pin: str = Form(...),
+):
+    if pin != NUKE_PIN:
+        return RedirectResponse(url="/admin/nuke", status_code=302)
+
+    return templates.TemplateResponse("final.html", {
+        "request": request,
     })

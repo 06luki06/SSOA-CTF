@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+
+<body>
+    <div class="bg-img-container">
+        <img src="/public/img/bg-img.jpg" alt="Background" class="bg-img">
+    </div>
+    <div class="card-container">
+        <div class="card">
+            <h1>Authentication PIN</h1>
+            <p class="greeting">Decimate Shelbyville</p>
+            <form action="/admin/nuke/pin" method="post">
+                <input type="text" name="pin" placeholder="00000"/>
+                <button type="submit" class="btn-primary">
+                    Start Nuke
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
