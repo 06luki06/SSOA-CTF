@@ -13,18 +13,21 @@ body {
     background-color: #f0f0f0;
 }
 
+strong {
+    font-size: 1.5rem;
+}
+
 .card-container {
     display: flex;
     gap: 25px;
 }
 
 .card {
-    width: 350px;
     padding: 20px;
     background-color: white;
-    border: 10px solid;  /* Make sure you define the border width */
+    border: 10px solid; /* Make sure you define the border width */
     border-image: linear-gradient(135deg, yellow 12.5%, black 12.5%, black 25%, yellow 25%, yellow 37.5%, black 37.5%, black 50%, yellow 50%, yellow 62.5%, black 62.5%, black 75%, yellow 75%, yellow 87.5%, black 87.5%) 10;
-    border-radius: 20px;  /* Add border radius here */
+    border-radius: 20px; /* Add border radius here */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     min-height: 200px;
 }
@@ -152,3 +155,26 @@ input:focus {
     min-width: 80%;
 }
 
+.btn-wrapper {
+    margin-top: 1rem;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.intro-wrapper {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.text-wrapper {
+    font-size: 1.2rem;
+}
+
+.text-wrapper > .inner-text {
+    margin-top: 0.5rem;
+}

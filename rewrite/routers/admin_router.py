@@ -4,7 +4,8 @@ from pydantic import BaseModel
 from starlette.responses import RedirectResponse
 
 from environment import NUKE_PIN
-from middleware.auth import ensure_admin
+from middleware.auth import ensure_admin, ensure_authenticated
+from utils import limiter
 from validate import User
 
 admin_router = APIRouter()
@@ -64,9 +65,10 @@ async def nuke_shelby_ville(
     })
 
 @admin_router.post("/admin/nuke/pin")
+@limiter.limit("5/minute")
 async def start_nuke(
         request: Request,
-        user: User = Depends(ensure_admin),
+        _user: User = Depends(ensure_authenticated),
         pin: str = Form(...),
 ):
     if pin != NUKE_PIN:

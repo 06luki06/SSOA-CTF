@@ -9,14 +9,36 @@
 </head>
 
 <body>
-    <div class="bg-img-container">
-        <img src="/public/img/bg-img.jpg" alt="Background" class="bg-img">
+<div class="bg-img-container">
+    <img src="/public/img/bg-img.jpg" alt="Background" class="bg-img">
+</div>
+<div class="content">
+    <div class="intro-wrapper">
+        <div class="card">
+            <h2>Intro</h2>
+            <div class="text-wrapper">
+                <strong>
+                    Ausgezeichnet!
+                </strong>
+                <div class="inner-text">
+                    <p>
+                        Good to see you, Mr Burns. Shelbyville took over the power plant, and we need to take it back!
+                    </p>
+                    <p>
+                        They changed your credentials, though I&apos;m sure your underpaid IT staff &quot;thought of a
+                        way&quot;
+                        to get
+                        you back into the system.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="card-container">
         <div class="card">
             <h2>Login</h2>
             {% if error %}
-            <p style="color:red;">{{ error }}</p>
+                <p style="color:red;">{{ error }}</p>
             {% endif %}
             <form action="/login" method="POST">
                 <div class="input-group">
@@ -41,6 +63,7 @@
             </div>
         </div>
     </div>
+</div>
 </body>
 
 </html>
