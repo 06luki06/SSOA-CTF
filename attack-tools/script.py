@@ -9,17 +9,18 @@ class RequestLoggerHandler(BaseHTTPRequestHandler):
         self.wfile.write(b'Hello, this is a logging server!')
 
     def do_GET(self):
-        self.log_request()
+        self.log_custom_request()  # Call the custom logging method
         self._send_response()
 
     def do_POST(self):
-        self.log_request()
+        self.log_custom_request()  # Call the custom logging method
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         logging.info(f"POST data: {post_data.decode('utf-8')}")
         self._send_response()
 
-    def log_request(self):
+    # Rename to avoid conflict with built-in method
+    def log_custom_request(self):
         logging.info(f"Incoming request: {self.command} {self.path}")
         for key, value in self.headers.items():
             logging.info(f"Header: {key} = {value}")

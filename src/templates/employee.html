@@ -1,0 +1,66 @@
+<!-- templates/employee.html -->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <script src="/public/js/employee.js" defer></script>
+</head>
+
+<body>
+<div class="bg-img-container">
+    <img src="/public/img/bg-img.jpg" alt="Background" class="bg-img">
+</div>
+<div class="content">
+    <div class="intro-wrapper">
+        <div class="card">
+            <div class="employee-wrapper">
+                <h2>{{ name }}</h2>
+                <div class="text-wrapper">
+                    <strong>
+                        Username: {{ username }}
+                    </strong>
+                </div>
+                <img src="/public/img/{{ username }}.jpg" alt="{{ name }}" style="max-width: 250px; max-height: 250px;">
+            </div>
+        </div>
+    </div>
+    <div class="card-container">
+        {% if not isAdmin %}
+            <div class="card" id="burnsComments">
+                <h2>Thoughts from colleagues</h2>
+                <div id="comments-con" class="comments">
+                    <!-- Comments will be loaded here -->
+                </div>
+                <div class="input-group">
+                    <label for="comment">Comment</label>
+                    <input type="text" id="comment" name="comment" required>
+                </div>
+                <button type="button" class="btn-primary" id="commentBtn">
+                    Leave a comment
+                </button>
+            </div>
+        {% endif %}
+        <!-- Employee Search Card -->
+        <div class="card" id="employeeSearch">
+            <h2>Employee Search</h2>
+            <form action="/employee/search" method="post">
+                <div class="input-group">
+                    <label for="employeeName">Name</label>
+                    <input type="text" id="employeeName" name="employeeName" required>
+                </div>
+                <button type="submit" class="btn-primary">
+                    Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!-- Hidden input to store recipientId -->
+<input type="hidden" id="recipientId" value="{{ eid }}">
+</body>
+
+</html>

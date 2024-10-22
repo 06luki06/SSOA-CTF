@@ -4,4 +4,6 @@
 **/.env
 **/dist
 **/drizzle
+**/.venv
+**/__pycache__
 local-testing/*
