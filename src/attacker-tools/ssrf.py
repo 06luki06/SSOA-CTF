@@ -1,5 +1,6 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
+
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Print request method and path
@@ -30,12 +31,14 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b'POST request received')
 
+
 # Set up and start the server
-def run(server_class=HTTPServer, handler_class=RequestHandler, port=8080):
+def run(server_class=HTTPServer, handler_class=RequestHandler, port=7000):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
     print(f'Starting server on port {port}. Press Ctrl+C to stop.')
     httpd.serve_forever()
+
 
 if __name__ == '__main__':
     run()
