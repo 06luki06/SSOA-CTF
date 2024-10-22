@@ -5,8 +5,10 @@ from typing import List
 class CommentBase(BaseModel):
     comment: str
 
+
 class CommentCreate(CommentBase):
     recipient_id: int
+
 
 class Comment(CommentBase):
     id: int
@@ -16,13 +18,22 @@ class Comment(CommentBase):
     class Config:
         from_attributes = True
 
+
 class UserBase(BaseModel):
     username: str = Field(..., max_length=255)
     name: str = Field(..., max_length=255)
     is_admin: bool = Field(default=False)
 
+
 class UserCreate(UserBase):
     password: str
+
+
+class AdminUserCreate(BaseModel):
+    first_name: str
+    last_name: str
+    password: str
+
 
 class User(UserBase):
     id: int

@@ -6,14 +6,18 @@ import hashlib
 import random
 import string
 
+
 def random_password():
     return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+
 
 def md5_hash(password: str) -> str:
     return hashlib.md5(password.encode()).hexdigest()
 
+
 def generate_username(firstname: str, lastname: str) -> str:
     return firstname[0].lower() + lastname.capitalize()
+
 
 def seed_users():
     # Create a new session
@@ -80,6 +84,7 @@ def seed_users():
         session.commit()
     finally:
         session.close()
+
 
 if __name__ == "__main__":
     seed_users()

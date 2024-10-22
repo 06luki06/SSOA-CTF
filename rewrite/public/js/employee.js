@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ comment, recipientId }),
+            body: JSON.stringify({comment, recipientId}),
         });
         document.getElementById('comment').value = '';
         fetchComments(); // Refresh comments
@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchComments() {
         const response = await fetch(`/comments/${recipientId}`);
         const comments = await response.json();
-
-        console.log(comments);
 
         commentContainer.innerHTML = ''; // Clear previous comments
         comments.forEach(comment => {

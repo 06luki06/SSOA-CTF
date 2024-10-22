@@ -5,12 +5,13 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from database import get_db
 from database.models import User, Comment
-from middleware.auth import ensure_authenticated
+from environment import PG_SCHEMA
+from middleware.auth import ensure_authenticated, ensure_admin
 from pydantic import BaseModel
-
 
 employee_router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+
 
 # Pydantic model for comment submission
 class CommentCreate(BaseModel):
@@ -20,6 +21,7 @@ class CommentCreate(BaseModel):
     class Config:
         from_attributes = True
 
+
 @employee_router.get("/employee")
 async def employee_profile(request: Request, user: User = Depends(ensure_authenticated)):
     return templates.TemplateResponse("profile.html", {
@@ -28,30 +30,34 @@ async def employee_profile(request: Request, user: User = Depends(ensure_authent
         "username": user.username
     })
 
+
 @employee_router.get("/employee/{eid}")
 async def employee_detail(
-    request: Request,
-    eid: int,  # Changed from UUID to int
-    user: User = Depends(ensure_authenticated),
-    db: Session = Depends(get_db)
+        request: Request,
+        eid: int,
+        user: User = Depends(ensure_authenticated),
+        db: Session = Depends(get_db)
 ):
     target_user = db.query(User).filter(User.id == eid).first()
     if not target_user or target_user.id == user.id:
         return RedirectResponse(url="/employee", status_code=302)
+
     return templates.TemplateResponse("employee.html", {
         "request": request,
         "title": "Employee Profile",
         "isAdmin": target_user.is_admin,
         "name": target_user.name,
-        "eid": target_user.id  # No need to convert to string
+        "username": target_user.username,
+        "eid": target_user.id
     })
+
 
 @employee_router.get("/employee/admin/{eid}")
 async def employee_admin(
-    request: Request,
-    eid: int,  # Changed from UUID to int
-    user: User = Depends(ensure_authenticated),
-    db: Session = Depends(get_db)
+        request: Request,
+        eid: int,  # Changed from UUID to int
+        user: User = Depends(ensure_authenticated),
+        db: Session = Depends(get_db)
 ):
     target_user = db.query(User).filter(User.id == eid).first()
     if not target_user or not target_user.is_admin:
@@ -61,15 +67,17 @@ async def employee_admin(
         "title": "Admin Profile",
         "isAdmin": target_user.is_admin,
         "name": target_user.name,
+        "username": target_user.username,
         "eid": target_user.id  # No need to convert to string
     })
 
+
 @employee_router.post("/employee/search")
 async def employee_search(
-    request: Request,
-    employeeName: str = Form(...),
-    user: User = Depends(ensure_authenticated),
-    db: Session = Depends(get_db)
+        request: Request,
+        employeeName: str = Form(...),
+        user: User = Depends(ensure_authenticated),
+        db: Session = Depends(get_db)
 ):
     target_user = db.query(User).filter(User.name.ilike(f"%{employeeName}%")).first()
     if not target_user:
@@ -80,11 +88,12 @@ async def employee_search(
     else:
         return RedirectResponse(url=f"/employee/{target_user_id}", status_code=302)
 
+
 @employee_router.post("/comments")
 async def add_comment(
-    comment_data: CommentCreate = Body(...),
-    user: User = Depends(ensure_authenticated),
-    db: Session = Depends(get_db)
+        comment_data: CommentCreate = Body(...),
+        user: User = Depends(ensure_authenticated),
+        db: Session = Depends(get_db)
 ):
     new_comment = Comment(
         author_id=user.id,
@@ -102,7 +111,7 @@ async def get_comments(
         db: Session = Depends(get_db)
 ):
     # Query to fetch the comments
-    comments_raw_query = "SELECT u.name, c.recipient_id, c.comment FROM nuclear.comments c, nuclear.employees u WHERE u.id = c.author_id AND recipient_id = " + recipient_id
+    comments_raw_query = f"SELECT u.name, c.recipient_id, c.comment FROM {PG_SCHEMA}.comments c, {PG_SCHEMA}.employees u WHERE u.id = c.author_id AND recipient_id = " + recipient_id
     comments = db.execute(text(comments_raw_query)).fetchall()
 
     # Convert the result set to a list of dictionaries
