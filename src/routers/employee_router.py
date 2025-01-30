@@ -42,6 +42,9 @@ async def employee_detail(
     if not target_user or target_user.id == user.id:
         return RedirectResponse(url="/employee", status_code=302)
 
+    if target_user.is_admin:
+        return RedirectResponse(url=f"/employee/admin/{eid}", status_code=302)
+
     return templates.TemplateResponse("employee.html", {
         "request": request,
         "title": "Employee Profile",
