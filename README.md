@@ -34,7 +34,7 @@ Onced logged in, you will get to an Employee Page. Here you can see a search fie
 The search returns the ID of the user. This ID can be used to access the user's profile page.
 Using that, we can retrieve Mr. Burns' ID, which is the only user that has "isAdmin" set to true. The hint is checking the URL.
 
-### SQLI
+### SQLI - SQL Injection
 
 Next goal would be to find a way to get Mr. Burns' password. Using SQL Injection we may exploit the URL of the employee page to get the passwords of the users in MD5. The `comments/{id}` route is vulnerable.
 
